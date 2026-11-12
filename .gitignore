@@ -3,9 +3,6 @@ __pycache__/
 *.py[cod]
 .venv/
 venv/
-rag_store/
-.streamlit/
-.DS_Store
 env/
 .pytest_cache/
 .mypy_cache/
@@ -22,7 +19,7 @@ htmlcov/
 # Jupyter
 .ipynb_checkpoints/
 
-# Índice RAG y artefactos generados por el notebook
+# Índice RAG (se conserva si ya está versionado)
 rag_store/
 
 # Sistema operativo y logs

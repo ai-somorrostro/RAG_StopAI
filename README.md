@@ -1,34 +1,55 @@
 # RAG_StopAI
+RAG sobre las leyes y normativa sobre la Inteligencia Artificial en España
 
-RAG sobre las leyes y normativa sobre la Inteligencia Artificial en España.
+## Consulta interactiva por terminal
 
-## Estructura
+El proyecto incluye un chat RAG que recupera fragmentos de los documentos
+indexados y los envía a un modelo local servido por [Ollama](https://ollama.com/).
+Las preguntas y los documentos no se envían a una API remota.
 
-- `data/`: documentos en markdown usados por el RAG.
-- `docs/`: PDFs originales.
-- `Notebook.ipynb`: pipeline de preparación del índice (chunking, embeddings y FAISS).
-- `rag.py`: lógica reutilizable de carga, indexación, búsqueda y generación.
-- `app.py`: interfaz web con Streamlit para preguntar al RAG.
+### Preparación
 
-## Uso
+1. Instala Ollama y descarga un modelo:
+
+   ```bash
+   ollama pull qwen2.5:3b
+   ```
+
+   Ollama debe estar ejecutándose. En Linux, si no se inició como servicio,
+   arráncalo en otra terminal con `ollama serve`.
+
+2. Desde la carpeta del proyecto, crea un entorno e instala las dependencias:
+
+   ```bash
+   python3 -m venv .venv
+   source .venv/bin/activate
+   python -m pip install -r requirements.txt
+   ```
+
+3. Si no existen los archivos de `rag_store/`, abre `Notebook.ipynb` y ejecuta
+   todas sus celdas para generarlos. El modelo de embeddings se descargará la
+   primera vez que se ejecute.
+
+4. Inicia el chat:
+
+   ```bash
+   python chat.py
+   ```
+
+Escribe una consulta y el programa mostrará la respuesta y los fragmentos
+recuperados como fuentes. Puedes hacer consultas sucesivas; escribe `salir`,
+`exit` o `quit` para terminar. Cada consulta se responde usando sus propios
+fragmentos recuperados.
+
+El modelo predeterminado es `qwen2.5:3b`, elegido para funcionar en equipos con
+memoria limitada. Puedes elegir otro que tengas
+descargado en Ollama mediante `OLLAMA_MODEL=nombre python chat.py`, o usar las
+opciones `--model`, `--ollama-url` y `--top-k`. Verifica siempre la versión de
+la legislación en la fuente oficial antes de usar una respuesta con fines
+jurídicos.
+
+### Pruebas
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-streamlit run app.py
-```
-
-La primera ejecución descarga el modelo de embeddings y construye el índice en
-`rag_store/` a partir de los documentos de `data/`.
-
-## Respuestas con LLM (opcional)
-
-Por defecto la interfaz muestra los fragmentos recuperados (modo extractivo).
-Para obtener respuestas redactadas, activa la opción de Ollama en la barra
-lateral y ejecuta un modelo local:
-
-```bash
-ollama serve
-ollama pull llama3.1
+python -m unittest discover -s tests
 ```
