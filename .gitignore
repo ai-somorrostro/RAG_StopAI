@@ -19,7 +19,7 @@ htmlcov/
 # Jupyter
 .ipynb_checkpoints/
 
-# Índice RAG (se conserva si ya está versionado)
+# Índice RAG generado localmente por crear_rag.ipynb
 rag_store/
 
 # Sistema operativo y logs
